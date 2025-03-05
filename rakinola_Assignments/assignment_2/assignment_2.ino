@@ -1,7 +1,8 @@
 /*
 Akinola Rukayat
 Spring2025 - MTEC2280
-Assignment_1
+Assignment_2
+note: same logic as assignment_1 but here the button is a toggle
 */
 
 //randomNumber variable, pattern change counter, and pattern 3 & 4 count variable
@@ -9,10 +10,12 @@ long randNum;
 int choice = 0;
 
 //button pin number
-const int buttonPin = 18;
+const int buttonPin = 9;
 
 // button variables
-int buttonValue = 0;
+bool buttonValue;
+bool toggle;
+bool lastButtonState;
 
 void setup() {
   // put your setup code here, to run once:
@@ -23,7 +26,7 @@ void setup() {
   pinMode(5, OUTPUT);
   pinMode(6, OUTPUT);
   pinMode(7, OUTPUT);
-  pinMode(buttonPin, INPUT);
+  pinMode(buttonPin, INPUT_PULLUP);
 
   //randomNumber generator setup 
   //this setup should ensures a different number generatered each time
@@ -34,30 +37,29 @@ void setup() {
 void loop() {
   //button input check & choice counter
   buttonValue = !digitalRead(buttonPin);
-  Serial.printf("choice = ", choice);
-  Serial.print(choice);
-  Serial.println();
-  Serial.print("buttonPin = ");
-  Serial.print(buttonValue);
-  Serial.println();
+ 
+  if(buttonValue && !lastButtonState){
+    toggle = !toggle;
+  }
+
+  Serial.printf("buttonState = %i, toggle = %i, choice = %i \n", buttonValue, toggle, choice);
   delay(500);
+  lastButtonState = buttonValue;
 
 
   //cycle through the four pattern with each button press
-  if((buttonValue == 1) && (choice < 5)){
+  if((toggle == 1) && (choice < 5)){
     choice += 1;
   }
   //reset counter
-  if((buttonValue == 1) && (choice > 4)){
+  if((toggle == 1) && (choice > 4)){
     choice = 0;
   }
   
   //pattern one (Using a randomNumber generator to choose the pins)
   if(choice == 1){
     randNum = random(4,8); //interval [4,8] = 4,5,6,7
-    Serial.print("randNum = ");
-    Serial.print(randNum);
-    Serial.println();
+    Serial.printf("randNum = %i \n", randNum);
     digitalWrite(randNum, HIGH);
     delay(500);
     digitalWrite(randNum, LOW);
@@ -79,9 +81,7 @@ void loop() {
   //pattern three(turn all the LED on from 4 through 7 using a  for loop)
   else if(choice == 3){
     for(int i = 4; i < 8; i++){
-      Serial.print("i = ");
-      Serial.print(i);
-      Serial.println();
+      Serial.printf("i = %i \n", i);
       digitalWrite(i, HIGH);
       delay(500);
     }
@@ -89,9 +89,7 @@ void loop() {
   //pattern four(turn all the LED off from 7 through 4 using a  for loop)
   else if(choice == 4){
      for(int i = 7; i > 3; i--){
-      Serial.print("i = ");
-      Serial.print(i);
-      Serial.println();
+      Serial.printf("i = %i \n", i);
       digitalWrite(i,LOW);
       delay(500);
     }
