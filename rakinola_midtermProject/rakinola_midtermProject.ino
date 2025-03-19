@@ -1,7 +1,7 @@
 /*
 Rukayat Akinola
 Spring'25 - MTEC2280
-Midterm Project
+Midterm Project Proposal & WIP
 
 Description: I intend to use a pot to control a servo, with an arm extension. 
 The arm extension would act like a real hand obstructing a photocell.
@@ -46,13 +46,13 @@ void loop() {
   servo.write(potvalue); 
 
   //note: for WIP the photocell is not yet connected to the servoMotor
-  if(photovalue > 100){
-    digitalWrite(ledPin, HIGH);
-    delay(500);
-  }
-  else {
-    digitalWrite(ledPin, LOW);
-  }
+  // if(photovalue > 100){
+  //   digitalWrite(ledPin, HIGH);
+  //   delay(500);
+  // }
+  // else {
+  //   digitalWrite(ledPin, LOW);
+  // }
 
 
 }
