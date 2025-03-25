@@ -40,7 +40,6 @@ int buttonRead;
 void setup() {
   // put your setup code here, to run once:
   pinMode(ledGreen, OUTPUT);
-  //pinMode(ledBlue, OUTPUT);
   pinMode(ledRed, OUTPUT);
 
   servo.attach(servoPin);
@@ -61,14 +60,14 @@ void loop() {
   angle = map(potRead, 0, 255, 0, 180);\
   
   /*I introduced a button to control the Potentiometer and servo angle incongurence.
-  my intial problem was, I wrote code for independent servo movement 
+  my intial problem was when I wrote code for independent servo movement 
   it become out of sync with the potentiometer. 
   Now, the servo ignores the potentiometer unless the button is pressed
+  This allows me to always reset the Potentiometer to 0, to re-sync it with the servo angle. 
   */
   if(buttonRead == 1){
     servo.write(angle); 
   }
-  //servo.write(angle);
   
   photoRead = analogRead(photoPin);
   buttonRead = digitalRead(buttonPin);
@@ -86,12 +85,22 @@ void loop() {
     currentTime = millis();
     digitalWrite(ledRed, HIGH);
     digitalWrite(ledGreen, LOW);
+    
+    /* While included a 1000 millis (1 second) timer. 
+    I don't feel it too necessary for the circuit.
+    The angle > 0 logic, however allows the circuit to ignore input that isn't the arm extension.
+    So, the angle doesn't attempt to return to 0 from other interferences. 
+    */
     if((currentTime >= timeInterval) && (angle > 0)){
        servo.write(angle - angle);
     }
    
   }
   else{
+    //reset timer
+    currentTime = 0;
+
+    //reset LED light signals for range
     digitalWrite(ledGreen, HIGH);
     digitalWrite(ledRed, LOW);
   }
