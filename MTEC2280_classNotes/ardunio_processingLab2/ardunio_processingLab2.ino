@@ -50,7 +50,7 @@ void loop()
     printf() is only for debugging, not for UART-to-Processing communication
     do not use Serial.printf() and Serial.write() at the same time!
   */
-  // Serial.printf("%i \t %i \t %i \t %i \n", adcRead_1, adcRead_2, buttonState_1, buttonState_2);
+  //Serial.printf("%i \t %i \t %i \t %i \n", adcRead_1, adcRead_2, buttonState_1, buttonState_2);
 
   currentTime = millis(); //read current elapsed time
   if (currentTime - lastTime >= timerInterval)  //if we have reached our timer interval...
