@@ -10,11 +10,6 @@ The doors function like portals would in adventure games. When the player is dir
 When the hit the button they will be teleported to another door in the scene. 
 */
 
-import processing.serial.*; //imports Serial library from Processing
-
-Serial myPort; // creates object from Serial class
-byte[] val ; // create array of bytes for incoming serial port data
-
 //playerMovement
 int xAxis = 450;
 int yAxis = 325;
@@ -31,14 +26,10 @@ void setup() {
   size(900,650);
   background(127);
   
-  //Serial Port setup
-  printArray(Serial.list()); // this line prints the port list to the console
-  String portName = Serial.list()[2]; //change the number in the [] for the port you need
-  myPort = new Serial(this, portName, 115200);  //open selected port at given baud rate
 }
 
 void draw() {
-  portConnect();
+  
   background(127);
   drawDoors();
   drawPlayer();
@@ -71,7 +62,7 @@ void drawDoors(){
 void drawPlayer(){
   //draw player in the center
   fill(255);
-  rect(xAxis, yAxis, 20,20);
+  rect(xAxis, yAxis, 20, 20);
   
   //println(xAxis, yAxis);
   
@@ -112,6 +103,7 @@ void moveDoors(){
  
   println(doorX);
   println(doorY);
+/*
   //redraw doors
   //draw Door One
   fill(0);
@@ -128,7 +120,7 @@ void moveDoors(){
   
   noFill();
   rect(15, 15, 870, 620);
-  
+*/
 }
 void keyReleased(){
   //ASCII code for spaceBar = 32
@@ -136,29 +128,11 @@ void keyReleased(){
     //println("space");
     canMoveDoors = true;
     moveDoors();
+  }
+  else{
     canMoveDoors = false;
   }
 }
-
-void portConnect(){
-  if (myPort.available() > 0 ) 
-  {
-    //read received bytes into array until 'e' ASCII value is received
-    val = myPort.readBytesUntil('e'); 
-  }
-  
-  if (val.length == 5)
-  {
-    println(val); //print val array to confirm data arrived
-    //mapping -128 to 127 into 0 to 255 range, and Casting to integer
-    int pot_1 = int(map(val[2], -128, 127, 0, 255));
-    int pot_2 = int(map(val[3], -128, 127, 0, 255));
-    
-    //casting Byte button values to boolean
-    boolean b_1 = boolean(val[0]);
-    boolean b_2 = boolean(val[1]);
-}
-
 
 
   
