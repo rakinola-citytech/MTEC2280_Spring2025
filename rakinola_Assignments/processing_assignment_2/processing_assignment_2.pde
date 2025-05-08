@@ -23,15 +23,11 @@ Note:
 I've realized that this is a lot of functionality for a short class assignment
 would like to revisit for a final project or more robust project. 
 */
+
 import processing.serial.*; //imports Serial library from Processing
 
 Serial myPort; // creates object from Serial class
-
-String myString = null; // create array of bytes for incoming serial port data
-
-int lf = 10; //ASCII linefeed, newline equals 10
-
-int[] val;
+byte[] val ; // create array of bytes for incoming serial port data
 
 //playerMovement
 int xAxis;
@@ -117,13 +113,13 @@ void drawDoors(){
 void playerMove(){
    //playerMovement
   //xMove
-  //pot_1 = int(map(val[2], -128, 127, 0, 255));
-  xAxis = pot_1;
+  pot_1 = int(map(val[2], -128, 127, 0, 255));
+  xAxis = int(map(pot_1, 0, 255, 25, 850));
   println("x coordinates");
   println(val[2], pot_1, xAxis);
   //yMove
-  //pot_2 = int(map(val[3], -128, 127, 0, 255));
-  yAxis = pot_2;
+  pot_2 = int(map(val[3], -128, 127, 0, 255));
+  yAxis = int(map(pot_2, 0, 255, 25, 600));
   println("y coordinates");
   println(val[3], pot_2, yAxis);
 }
@@ -174,25 +170,24 @@ void moveDoors(){
 
 
 void portConnect(){
- if (myPort.available() > 0 ) //if there is data on UART serial port...
+  if (myPort.available() > 0 ) 
   {
-    myString = myPort.readStringUntil(lf);  //read ASCII data into string until LINE FEED
+    //read received bytes into array until 'e' ASCII value is received
+    val = myPort.readBytesUntil('e'); 
+  }
+  
+  if (val.length == 5)
+  {
+    //println(val); //print val array to confirm data arrived
+    //mapping -128 to 127 into 0 to 255 range, and Casting to integer
+    //int pot_1 = int(map(val[2], -128, 127, 0, 255));
+    //int pot_2 = int(map(val[3], -128, 127, 0, 255));
     
-    if (myString != null) //if the string contains data...
-    {
-      println(myString);  //print myString to serial monitor, only for debugging
-      val = int(split(myString, ','));  //split string into array elements @ comma, cast into integer
-      println(val);  //print val to serial monitor, only for debugging
-      
-      pot_1 = int(map(val[2], 0, 1023, 20, width-30));
-      pot_2 = int(map(val[3], 0, 1023, 20, height-30));
-      
-      //casting Byte button values to boolean
-      b_1 = boolean(val[0]);
-      b_2 = boolean(val[1]);
-      
-      println("button reads");
-      println(b_1, b_2);
+    //casting Byte button values to boolean
+    b_1 = boolean(val[0]);
+    b_2 = boolean(val[1]);
+    println("button reads");
+    println(b_1, b_2);
   }
 }
 
